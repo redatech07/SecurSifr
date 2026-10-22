@@ -1,10 +1,10 @@
 #include <iostream>
 #include <string>
-#include "../include/FileManager.hpp"
-#include "../include/KeyManager.hpp"
-#include "../include/ArgumentParser.hpp"
-#include "../include/Crypt.hpp"
-#include "../include/SFCFormat.hpp"
+#include "FileManager.hpp"
+#include "KeyManager.hpp"
+#include "ArgumentParser.hpp"
+#include "Crypt.hpp"
+#include "SFCFormat.hpp"
 using namespace std;
 
 

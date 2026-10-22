@@ -2,7 +2,7 @@
 #include <fstream>
 #include <sstream>
 #include <string>
-#include "../include/SFCFormat.hpp"
+#include "SFCFormat.hpp"
 using namespace std;
 
 const string SFCFormat::EXTENSION_SFC = ".sfc";

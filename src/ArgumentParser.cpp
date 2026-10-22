@@ -1,6 +1,6 @@
 #include <iostream>
 #include <string>
-#include "../include/ArgumentParser.hpp"
+#include "ArgumentParser.hpp"
 using namespace std;
 
 
