@@ -1,5 +1,7 @@
 keys/*
 !keys/.gitkeep
+file_to_encrypt/*
+!file_to_encrypt/.gitkeep
 *.sfc
 *.o
 *.out
