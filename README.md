@@ -6,6 +6,12 @@
 
 SecurSifr permet de chiffrer des fichiers à l'aide d'une clé générée automatiquement, puis de les déchiffrer pour retrouver leur contenu d'origine.
 
+Le projet est organisé autour de dossiers spécifiques situés à la racine :
+- `build/` : Dossier dédié à l'exécutable du programme.
+- `file_to_encrypt/` : Dossier dédié contenant les fichiers d'origine que vous souhaitez chiffrer.
+- `encrypted_file/` : Dossier dédié où seront directement stockés les fichiers chiffrés.
+- `keys/` : Dossier contenant les clés de chiffrement générées.
+
 Les fichiers chiffrés utilisent le format personnalisé `.sfc`. Le programme conserve également l'extension du fichier d'origine afin de pouvoir la restaurer lors du déchiffrement.
 
 ### Fonctionnalités
@@ -20,22 +26,25 @@ Les fichiers chiffrés utilisent le format personnalisé `.sfc`. Le programme co
 
 ### Compilation
 
-Depuis le répertoire du projet, exécuter :
+Depuis le répertoire du projet, exécutez la commande suivante pour générer l'exécutable dans le dossier `build/` :
 
 ```bash
-g++ src/*.cpp -I ./include -o SecurSifr
+g++ src/*.cpp -I ./include -o build/SecurSifr
 ```
 
 ### Utilisation
 
-Le programme se lance depuis le terminal et reçoit les informations nécessaires sous forme d'arguments.
+Le programme se lance depuis le terminal et reçoit les informations nécessaires sous forme d'arguments. 
+
+* **Chiffrement :** Les fichiers à chiffrer doivent obligatoirement se trouver dans le dossier `file_to_encrypt/`.
+* **Stockage :** Le fichier chiffré généré sera automatiquement enregistré dans le dossier `encrypted_file/`.
 
 #### Options disponibles
 
 | Option | Description |
 |---|---|
 | `-m`, `--mode` | Définit le mode de fonctionnement. |
-| `-f`, `--fichier`, `--file` | Indique le fichier à traiter. |
+| `-f`, `--fichier`, `--file` | Indique le chemin du fichier à traiter. |
 | `-k`, `-c`, `--cle`, `--key` | Définit le nom de la clé. |
 
 Modes disponibles :
@@ -47,80 +56,74 @@ Le mode et le fichier sont obligatoires. Le nom de la clé est facultatif pour l
 
 ### Chiffrer un fichier
 
-Pour chiffrer un fichier, utiliser :
+Pour chiffrer un fichier présent dans le dossier `file_to_encrypt/`, utiliser :
 
 ```bash
-./SecurSifr --mode chiffrer --fichier document.txt
+./build/SecurSifr --mode chiffrer --fichier file_to_encrypt/document.txt
 ```
 
 Il est également possible d'utiliser les options courtes :
 
 ```bash
-./SecurSifr -m chiffrer -f document.txt
+./build/SecurSifr -m chiffrer -f file_to_encrypt/document.txt
 ```
 
 Par défaut, le programme déduit le nom de la clé du nom du fichier.
 
-Pour choisir un nom de clé :
+Pour choisir un nom de clé personnalisé :
 
 ```bash
-./SecurSifr --mode chiffrer --fichier document.txt --cle ma_cle
-```
-
-Ou avec les options courtes :
-
-```bash
-./SecurSifr -m chiffrer -f document.txt -k ma_cle
+./build/SecurSifr -m chiffrer -f file_to_encrypt/document.txt -k ma_cle
 ```
 
 Le programme :
 
-1. Lit le contenu du fichier.
+1. Lit le contenu du fichier situé dans `file_to_encrypt/`.
 2. Génère une clé de la même taille que le contenu.
-3. Sauvegarde la clé dans un fichier `.key`.
+3. Sauvegarde la clé dans le dossier `keys/`.
 4. Chiffre le contenu à l'aide de la clé.
-5. Enregistre le résultat dans un fichier `.sfc`.
+5. Enregistre le résultat directement dans le dossier `encrypted_file/` au format `.sfc`.
 6. Stocke l'extension d'origine dans le fichier chiffré.
 
 Exemple de fichiers générés :
 
 ```text
-document.txt
-document.sfc
+build/
+└── SecurSifr
+file_to_encrypt/
+└── document.txt
+encrypted_file/
+└── document.sfc
 keys/
 └── document.key
 ```
 
-Si le nom de clé `ma_cle` est choisi, le fichier de clé s'appelle `ma_cle.key`.
-
 ### Déchiffrer un fichier
 
-Pour déchiffrer un fichier `.sfc`, indiquer le nom du fichier et celui de la clé correspondante :
+Pour déchiffrer un fichier présent dans le dossier `encrypted_file/`, indiquer le chemin du fichier chiffré ainsi que le nom de sa clé correspondante :
 
 ```bash
-./SecurSifr --mode dechiffrer --fichier document.sfc --cle document
+./build/SecurSifr --mode dechiffrer --fichier encrypted_file/document.sfc --cle document
 ```
 
 Avec les options courtes :
 
 ```bash
-./SecurSifr -m dechiffrer -f document.sfc -k document
+./build/SecurSifr -m dechiffrer -f encrypted_file/document.sfc -k document
 ```
 
 Le programme :
 
-1. Ouvre le fichier `.sfc`.
+1. Ouvre le fichier `.sfc` présent dans `encrypted_file/`.
 2. Récupère l'extension d'origine.
 3. Lit le contenu chiffré.
-4. Charge la clé correspondante.
+4. Charge la clé correspondante depuis le dossier `keys/`.
 5. Déchiffre le contenu.
 6. Recrée le fichier avec son extension d'origine.
 
-Par exemple, le déchiffrement de `document.sfc` permet de recréer `document.txt` si l'extension d'origine était `.txt`.
-
 ### Gestion des clés
 
-Les clés sont enregistrées dans des fichiers `.key`. Le nom fourni dans les arguments correspond au nom du fichier de clé, sans l'extension `.key`.
+Les clés sont enregistrées dans des fichiers `.key` à l'intérieur du dossier `keys/`. Le nom fourni dans les arguments correspond au nom du fichier de clé, sans l'extension `.key`.
 
 Exemple :
 
@@ -148,6 +151,7 @@ SecurSifr est un projet étudiant fourni « en l'état », sans garantie de séc
 
 L'auteur décline toute responsabilité concernant les dommages ou pertes résultant de l'utilisation du logiciel, dans les limites prévues par la loi applicable.
 
+
 ---
 
 ## 🇬🇧 English
@@ -155,6 +159,12 @@ L'auteur décline toute responsabilité concernant les dommages ou pertes résul
 ### Overview
 
 SecurSifr is a C++ command-line application for encrypting and decrypting files using automatically generated keys.
+
+The project is organized with specific folders at the root level:
+- `build/`: Dedicated directory for the program executable.
+- `file_to_encrypt/`: Dedicated folder containing the original files you want to encrypt.
+- `encrypted_file/`: Dedicated folder where encrypted files will be directly stored.
+- `keys/`: Folder containing the generated encryption keys.
 
 Encrypted files use a custom `.sfc` format. The program also preserves the original file extension so it can be restored during decryption.
 
@@ -170,22 +180,25 @@ Encrypted files use a custom `.sfc` format. The program also preserves the origi
 
 ### Compilation
 
-From the project directory, run:
+From the project directory, run the following command to compile the program into the `build/` folder:
 
 ```bash
-g++ src/*.cpp -I ./include -o SecurSifr
+g++ src/*.cpp -I ./include -o build/SecurSifr
 ```
 
 ### Usage
 
 The program runs from the terminal and accepts command-line arguments.
 
+* **Encryption:** Files to encrypt must be placed inside the `file_to_encrypt/` folder.
+* **Storage:** The resulting encrypted file will be automatically stored inside the `encrypted_file/` folder.
+
 #### Available options
 
 | Option | Description |
 |---|---|
 | `-m`, `--mode` | Sets the operating mode. |
-| `-f`, `--fichier`, `--file` | Specifies the file to process. |
+| `-f`, `--fichier`, `--file` | Specifies the path to the file to process. |
 | `-k`, `-c`, `--cle`, `--key` | Specifies the key name. |
 
 Available modes:
@@ -197,80 +210,74 @@ The mode and file arguments are required. The key name is optional for encryptio
 
 ### Encrypt a file
 
-To encrypt a file, run:
+To encrypt a file located inside the `file_to_encrypt/` folder, run:
 
 ```bash
-./SecurSifr --mode encrypt --file document.txt
+./build/SecurSifr --mode encrypt --file file_to_encrypt/document.txt
 ```
 
 You can also use the short options:
 
 ```bash
-./SecurSifr -m encrypt -f document.txt
+./build/SecurSifr -m encrypt -f file_to_encrypt/document.txt
 ```
 
 By default, the program derives the key name from the input filename.
 
-To specify a key name:
+To specify a custom key name:
 
 ```bash
-./SecurSifr --mode encrypt --file document.txt --key my_key
-```
-
-Or use the short options:
-
-```bash
-./SecurSifr -m encrypt -f document.txt -k my_key
+./build/SecurSifr -m encrypt -f file_to_encrypt/document.txt -k my_key
 ```
 
 The program:
 
-1. Reads the file contents.
+1. Reads the file contents from `file_to_encrypt/`.
 2. Generates a key matching the content size.
-3. Saves the key in a `.key` file.
+3. Saves the key in the `keys/` folder.
 4. Encrypts the contents using the key.
-5. Saves the result in an `.sfc` file.
+5. Saves the result directly inside the `encrypted_file/` folder with the `.sfc` extension.
 6. Stores the original file extension in the encrypted file.
 
-Example output:
+Example of generated files and structure:
 
 ```text
-document.txt
-document.sfc
+build/
+└── SecurSifr
+file_to_encrypt/
+└── document.txt
+encrypted_file/
+└── document.sfc
 keys/
 └── document.key
 ```
 
-If `my_key` is specified, the key file is named `my_key.key`.
-
 ### Decrypt a file
 
-To decrypt an `.sfc` file, provide the filename and the corresponding key name:
+To decrypt an `.sfc` file located inside the `encrypted_file/` folder, provide the encrypted file path and the corresponding key name:
 
 ```bash
-./SecurSifr --mode decrypt --file document.sfc --key document
+./build/SecurSifr --mode decrypt --file encrypted_file/document.sfc --key document
 ```
 
 Using short options:
 
 ```bash
-./SecurSifr -m decrypt -f document.sfc -k document
+./build/SecurSifr -m decrypt -f encrypted_file/document.sfc -k document
 ```
 
 The program:
 
-1. Opens the `.sfc` file.
+1. Opens the `.sfc` file inside `encrypted_file/`.
 2. Retrieves the original file extension.
 3. Reads the encrypted contents.
-4. Loads the corresponding key.
+4. Loads the corresponding key from the `keys/` folder.
 5. Decrypts the contents.
 6. Recreates the file with its original extension.
 
-For example, decrypting `document.sfc` recreates `document.txt` if the original extension was `.txt`.
-
 ### Key management
 
-Keys are stored in `.key` files. The name provided in the command-line arguments corresponds to the key filename without the `.key` extension.
+Keys are stored in `.key` files inside the `keys/` folder. The name provided in the command-line arguments corresponds to the key filename without the `.key` extension.
 
 Example:
 
