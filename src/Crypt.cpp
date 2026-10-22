@@ -1,6 +1,6 @@
 #include <iostream>
 #include <string>
-#include "../include/Crypt.hpp"
+#include "Crypt.hpp"
 using namespace std;
 
 
