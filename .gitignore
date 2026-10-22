@@ -1,11 +1,21 @@
-keys/*
-!keys/.gitkeep
-file_to_encrypt/*
-!file_to_encrypt/.gitkeep
-encrypted_file/*
-!encrypted_file/.gitkeep
-*.sfc
+# Compiled files
+build/*
 *.o
 *.out
 *.exe
+
+# Keys: ignore generated key files
+keys/*
+!keys/.gitkeep
+
+# Files to encrypt
+file_to_encrypt/*
+!file_to_encrypt/.gitkeep
+
+# Encrypted files
+encrypted_file/*
+!encrypted_file/.gitkeep
+*.sfc
+
+# macOS
 .DS_Store
