@@ -49,7 +49,7 @@ void chiffrerFichier(const string& nomFichier, string& nomCle)
     string crypter = C.encrypt(fichierlu, K.getCle());
     cout << "[OK] Contenu chiffre avec succes.\n";
 
-    string nomSortieSfc = nomFichier.substr(0, nomFichier.find_last_of('.'))+ Fo.getExtensionSFC();
+    string nomSortieSfc = "encrypted_file/" + nomFichier.substr(nomFichier.find_last_of('/') + 1, nomFichier.find_last_of('.') - nomFichier.find_last_of('/') - 1) + Fo.getExtensionSFC();
 
     cout << "[INFO] Fichier chiffre : " << nomSortieSfc << '\n';
 
@@ -136,7 +136,7 @@ void dechiffrerFichier(const string& nomFichier, const string& nomCle)
     cout << "[INFO] Dechiffrement du contenu...\n";
     string decrypt = C.decrypt(fichiercrypter, cle);
     cout << "[OK] Contenu dechiffre.\n";
-    string nomFichierSortie = nomFichier.substr(0, nomFichier.find_last_of('.')) + Fo.getExtensionDorigine();
+    string nomFichierSortie = "file_to_encrypt/" + nomFichier.substr(nomFichier.find_last_of('/') + 1, nomFichier.find_last_of('.') - nomFichier.find_last_of('/') - 1 ) + Fo.getExtensionDorigine();
 
     cout << "[INFO] Fichier de sortie : " << nomFichierSortie << '\n';
 
