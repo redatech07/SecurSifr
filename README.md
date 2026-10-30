@@ -44,7 +44,7 @@ Le programme se lance depuis le terminal et reçoit les informations nécessaire
 | Option | Description |
 |---|---|
 | `-m`, `--mode` | Définit le mode de fonctionnement. |
-| `-f`, `--fichier`, `--file` | Indique le chemin du fichier à traiter. |
+| `-f`, `--fichier`, `--file` | Indique le nom du fichier à traiter. |
 | `-k`, `-c`, `--cle`, `--key` | Définit le nom de la clé. |
 
 Modes disponibles :
@@ -59,13 +59,13 @@ Le mode et le fichier sont obligatoires. Le nom de la clé est facultatif pour l
 Pour chiffrer un fichier présent dans le dossier `file_to_encrypt/`, utiliser :
 
 ```bash
-./build/SecurSifr --mode chiffrer --fichier file_to_encrypt/document.txt
+./build/SecurSifr --mode chiffrer --fichier document.txt
 ```
 
 Il est également possible d'utiliser les options courtes :
 
 ```bash
-./build/SecurSifr -m chiffrer -f file_to_encrypt/document.txt
+./build/SecurSifr -m chiffrer -f document.txt
 ```
 
 Par défaut, le programme déduit le nom de la clé du nom du fichier.
@@ -73,7 +73,7 @@ Par défaut, le programme déduit le nom de la clé du nom du fichier.
 Pour choisir un nom de clé personnalisé :
 
 ```bash
-./build/SecurSifr -m chiffrer -f file_to_encrypt/document.txt -k ma_cle
+./build/SecurSifr -m chiffrer -f document.txt -k ma_cle
 ```
 
 Le programme :
@@ -100,16 +100,16 @@ keys/
 
 ### Déchiffrer un fichier
 
-Pour déchiffrer un fichier présent dans le dossier `encrypted_file/`, indiquer le chemin du fichier chiffré ainsi que le nom de sa clé correspondante :
+Pour déchiffrer un fichier présent dans le dossier `encrypted_file/`, indiquer le nom du fichier chiffré ainsi que le nom de la clé correspondante :
 
 ```bash
-./build/SecurSifr --mode dechiffrer --fichier encrypted_file/document.sfc --cle document
+./build/SecurSifr --mode dechiffrer --fichier document.sfc --cle document
 ```
 
 Avec les options courtes :
 
 ```bash
-./build/SecurSifr -m dechiffrer -f encrypted_file/document.sfc -k document
+./build/SecurSifr -m dechiffrer -f document.sfc -k document
 ```
 
 Le programme :
@@ -119,7 +119,7 @@ Le programme :
 3. Lit le contenu chiffré.
 4. Charge la clé correspondante depuis le dossier `keys/`.
 5. Déchiffre le contenu.
-6. Recrée le fichier avec son extension d'origine.
+6. Recrée le fichier et l'enregistre directement dans le dossier `file_to_encrypt/` au format d'origine.
 
 ### Gestion des clés
 
@@ -147,7 +147,11 @@ Il est nécessaire de conserver la clé associée à chaque fichier chiffré pou
 
 ### Limites et sécurité
 
-SecurSifr est un projet étudiant fourni « en l'état », sans garantie de sécurité. Il ne doit pas être utilisé pour protéger des données sensibles ou confidentielles. L'utilisateur doit conserver une copie de ses fichiers originaux et sauvegarder ses clés de chiffrement dans un endroit sûr. La perte d'une clé peut rendre les fichiers chiffrés irrécupérables.
+SecurSifr est un projet étudiant fourni « en l'état », sans garantie de sécurité. Il ne doit pas être utilisé pour protéger des données sensibles ou confidentielles. 
+
+L'utilisateur doit conserver une copie de ses fichiers originaux et sauvegarder ses clés de chiffrement dans un endroit sûr. La perte d'une clé peut rendre les fichiers chiffrés irrécupérables.
+
+Avant de déchiffrer un fichier, vérifiez qu'aucun fichier portant le même nom n'existe déjà dans `file_to_encrypt/`. Si c'est le cas, déplacez ou renommez le fichier existant pour éviter qu'il soit remplacé.
 
 L'auteur décline toute responsabilité concernant les dommages ou pertes résultant de l'utilisation du logiciel, dans les limites prévues par la loi applicable.
 
@@ -198,7 +202,7 @@ The program runs from the terminal and accepts command-line arguments.
 | Option | Description |
 |---|---|
 | `-m`, `--mode` | Sets the operating mode. |
-| `-f`, `--fichier`, `--file` | Specifies the path to the file to process. |
+| `-f`, `--fichier`, `--file` | Specifies the filename to process. |
 | `-k`, `-c`, `--cle`, `--key` | Specifies the key name. |
 
 Available modes:
@@ -213,13 +217,13 @@ The mode and file arguments are required. The key name is optional for encryptio
 To encrypt a file located inside the `file_to_encrypt/` folder, run:
 
 ```bash
-./build/SecurSifr --mode encrypt --file file_to_encrypt/document.txt
+./build/SecurSifr --mode encrypt --file document.txt
 ```
 
 You can also use the short options:
 
 ```bash
-./build/SecurSifr -m encrypt -f file_to_encrypt/document.txt
+./build/SecurSifr -m encrypt -f document.txt
 ```
 
 By default, the program derives the key name from the input filename.
@@ -227,7 +231,7 @@ By default, the program derives the key name from the input filename.
 To specify a custom key name:
 
 ```bash
-./build/SecurSifr -m encrypt -f file_to_encrypt/document.txt -k my_key
+./build/SecurSifr -m encrypt -f document.txt -k my_key
 ```
 
 The program:
@@ -254,16 +258,16 @@ keys/
 
 ### Decrypt a file
 
-To decrypt an `.sfc` file located inside the `encrypted_file/` folder, provide the encrypted file path and the corresponding key name:
+To decrypt an `.sfc` file located inside the `encrypted_file/` folder, provide the encrypted filename and the corresponding key name:
 
 ```bash
-./build/SecurSifr --mode decrypt --file encrypted_file/document.sfc --key document
+./build/SecurSifr --mode decrypt --file document.sfc --key document
 ```
 
 Using short options:
 
 ```bash
-./build/SecurSifr -m decrypt -f encrypted_file/document.sfc -k document
+./build/SecurSifr -m decrypt -f document.sfc -k document
 ```
 
 The program:
@@ -273,7 +277,7 @@ The program:
 3. Reads the encrypted contents.
 4. Loads the corresponding key from the `keys/` folder.
 5. Decrypts the contents.
-6. Recreates the file with its original extension.
+6. Restores the original file and saves it directly in the `file_to_encrypt/` directory, preserving its original filename and extension.
 
 ### Key management
 
@@ -301,6 +305,10 @@ Keep the key associated with each encrypted file to decrypt it later.
 
 ### Security limitations
 
-SecurSifr is a student project provided "as is", without any guarantee of security. It must not be used to protect sensitive or confidential data. Users must keep backups of their original files and store their encryption keys in a safe place. Losing a key may make encrypted files permanently unrecoverable.
+SecurSifr is a student project provided "as is", without any guarantee of security. It must not be used to protect sensitive or confidential data. 
+
+Users must keep backups of their original files and store their encryption keys in a safe place. Losing a key may make encrypted files permanently unrecoverable.
+
+Before decrypting a file, make sure that no file with the same name already exists in `file_to_encrypt/`. If one does, move or rename the existing file to prevent it from being overwritten.
 
 The author disclaims liability for any damages or losses resulting from the use of this software, to the extent permitted by applicable law.
