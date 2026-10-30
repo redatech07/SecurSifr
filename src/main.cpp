@@ -9,9 +9,11 @@ using namespace std;
 
 
 
-void chiffrerFichier(const string& nomFichier, string& nomCle)
+void chiffrerFichier(string& nomFichier, string& nomCle)
 {
     cout << "\n========== CHIFFREMENT ==========\n";
+
+    nomFichier = "file_to_encrypt/" + nomFichier;
 
     cout << "[INFO] Ouverture du fichier : " << nomFichier << '\n';
 
@@ -37,7 +39,7 @@ void chiffrerFichier(const string& nomFichier, string& nomCle)
 
     if (nomCle == "")
     {
-        nomCle = nomFichier.substr(0, nomFichier.find_last_of('.'));
+        nomCle = nomFichier.substr(nomFichier.find_last_of('/') + 1, nomFichier.find_last_of('.')-nomFichier.find_last_of('/') - 1);
         cout << "[INFO] Nom de la cle defini automatiquement : " << nomCle << '\n';
     }
 
@@ -85,9 +87,11 @@ void chiffrerFichier(const string& nomFichier, string& nomCle)
 
 
 
-void dechiffrerFichier(const string& nomFichier, const string& nomCle)
+void dechiffrerFichier(string& nomFichier, const string& nomCle)
 {
     cout << "\n========== DECHIFFREMENT ==========\n";
+
+    nomFichier = "encrypted_file/" + nomFichier;
 
     cout << "[INFO] Ouverture du fichier chiffre : "
          << nomFichier << '\n';
